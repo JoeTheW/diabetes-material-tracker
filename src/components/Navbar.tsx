@@ -1,31 +1,92 @@
+'use client';
 
-import React from "react";
-import ThemeToggle from "./ThemeSwitcher";
-import Link from "next/link";
-import { HomeIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import Link from 'next/link';
+import ThemeSwitcher from './ThemeSwitcher';
+import { useState } from 'react';
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-    return (
-    <div>
-        <ul className="flex justify-between pt-4 px-4 items-center">
-        <div className="flex gap-2">
-            <Link href="/" className="btn btn-ghost flex items-center gap-2">
-                <HomeIcon className="w-5 h-5"/>
-            </Link>
+    const pathname = usePathname();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
-            <Link href="/inventory">
-                <li className="btn btn-ghost">
-                Inventory
-                </li>
-            </Link>
-        </div>
+  // Function to close the drawer when a link is clicked
+  const closeDrawer = () => setDrawerOpen(false);
 
-        <div className="flex gap-5">
-            <ThemeToggle/>
+  const getPageName = (pathname: string): string => {
+    switch (pathname) {
+      case '/':
+        return 'Home';
+      case '/inventory':
+        return 'Inventory';
+      case '/about':
+        return 'About Us';
+      case '/contact':
+        return 'Contact';
+      default:
+        return 'Unknown Page';
+    }
+  };
+
+  const currentPage = getPageName(pathname);
+
+  return (
+    <div className="drawer drawer-mobile">
+      {/* The main layout */}
+      <input
+        id="drawer-toggle"
+        type="checkbox"
+        className="drawer-toggle"
+        checked={drawerOpen}
+        onChange={toggleDrawer}
+      />
+      <div className="drawer-content">
+        {/* Basic Navbar */}
+        <div className="flex justify-between pt-5 items-center px-4">
+          {/* Basic controls (like theme toggle) */}
+          <div className="flex justify-between items-center gap-5">
+          
+            <label htmlFor="drawer-toggle" className="btn btn-ghost">
+            <Bars3Icon className="w-10 h-10" />
+            </label>
+
+            <p className="font-semibold">{currentPage}</p>
+          </div>
         </div>
-        </ul>
+      </div>
+
+      {/* Side Menu Drawer (Sidebar) */}
+      <div className="drawer-side">
+        <label htmlFor="drawer-toggle" className="drawer-overlay" />
+        <div className="flex flex-col p-4 h-full w-80 bg-base-100 text-base-content">
+            <h1 className="px-2">Supply tracker</h1>
+
+            <ul className="">
+            <div className="divider divider-start"><span className="text-sm">theme</span></div>
+            <ThemeSwitcher/>
+
+            <div className="divider divider-start"><span className="text-sm">Navigation</span></div>
+            <li>
+                <Link href="/" onClick={closeDrawer} className="btn btn-ghost">
+                <HomeIcon className="w-5 h-5" />
+                <span>Home</span>
+                </Link>
+            </li>
+            <li>
+            <Link href="/inventory" onClick={closeDrawer} className="btn btn-ghost">
+                <TableCellsIcon className="w-5 h-5" />
+                <span>Inventory</span>
+                </Link>
+            </li>
+            </ul>
+        </div>
+      </div>
     </div>
-    );
+  );
+
+
 };
 
 export default Navbar;
