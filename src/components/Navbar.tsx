@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
     const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  
+
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
   // Function to close the drawer when a link is clicked
@@ -26,7 +26,7 @@ const Navbar = () => {
       case '/contact':
         return 'Contact';
       default:
-        return 'Unknown Page';
+        return pathname.split('/').pop() || 'Unknown page';
     }
   };
 
@@ -58,7 +58,7 @@ const Navbar = () => {
       </div>
 
       {/* Side Menu Drawer (Sidebar) */}
-      <div className="drawer-side">
+      <div className="drawer-side z-50">
         <label htmlFor="drawer-toggle" className="drawer-overlay" />
         <div className="flex flex-col p-4 h-full w-80 bg-base-100 text-base-content">
             <h1 className="px-2">Supply tracker</h1>
