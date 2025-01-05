@@ -133,7 +133,10 @@ export class DateUtils {
    * @returns True if the date is in the past, false otherwise.
    */
   public static isPast(date: Date): boolean {
-    return date < new Date();
+
+    const now = new Date();
+    const isInPast = date < now;
+    return isInPast;
   }
 
   /**

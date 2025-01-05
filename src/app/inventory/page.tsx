@@ -53,26 +53,27 @@ const InventoryPage = () => {
         <div key={item.name} className="card bg-base-100 shadow-sm border border-base-300 p-4">
           <div className="card-body p-1">
             <h3 className="card-title text-lg font-semibold text-primary">{item.name}</h3>
-            <p className="text-sm text-accent">{item.description}</p>
+            <p className="text-sm bg-base-100">{item.description}</p>
+            
+            <div className="mt-2 flex justify-between text-sm bg-base-100">
+              <span>Duration: {item.durationDays} days</span>
+              <span>Quantity: {item.quantity}</span>
+            </div>
 
-            <p className="text-sm text-accent">Last change: { DateUtils.simpleFormatDate(item.lastUsed) }</p>
+            <p className="text-sm bg-base-100">Last change: { DateUtils.simpleFormatDate(item.lastUsed) }</p>
             <p className="text-xs text-primary">
               <small>{ DateUtils.formatTimeDifference( item.lastUsed )} ago</small>
             </p>
 
-            <p className="text-sm text-accent">Next change: { DateUtils.simpleFormatDate( inventoryService.getNextUseDateForItem(item) ) }</p>
-            <p className={`text-xs ${ DateUtils.isPast( inventoryService.getNextUseDateForItem(item) ) ?'text-primary':'text-error'}`}>
+            <p className="text-sm bg-base-100">Next change: { DateUtils.simpleFormatDate( inventoryService.getNextUseDateForItem(item) ) }</p>
+            <p className={`text-xs ${ DateUtils.isPast( inventoryService.getNextUseDateForItem(item) ) ?'text-error font-extrabold animate-bounce':'text-primary text-bold'}`}>
               
               <small>{ DateUtils.formatTimeDifference( inventoryService.getNextUseDateForItem(item) )}
-                {DateUtils.isPast( inventoryService.getNextUseDateForItem(item) ) ? ' from now':' in the past!'}</small>
+                {DateUtils.isPast( inventoryService.getNextUseDateForItem(item) ) ? ' in the past!' : ' from now' }</small>
             </p>
 
-            <div className="mt-2 flex justify-between text-sm text-accent">
-              <span>Duration: {item.durationDays} days</span>
-              <span>Quantity: {item.quantity}</span>
-            </div>
             <p className="text-md text-primary">
-              Restock estimate: { DateUtils.formatTimeDifference( inventoryService.getFinalValidDateForItem(item) ) }
+              Supply ends: { DateUtils.formatTimeDifference( inventoryService.getFinalValidDateForItem(item) ) }
             </p>
             <p className="text-xs text-primary">
               <small>({ DateUtils.simpleFormatDate( inventoryService.getFinalValidDateForItem(item) )})</small>

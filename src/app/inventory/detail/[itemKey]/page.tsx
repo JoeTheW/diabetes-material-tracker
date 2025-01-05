@@ -4,6 +4,8 @@ import { DateUtils } from "@/components/utils/dateUtils";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import dbService from "@/services/dbService";
 import inventoryService, { InventoryItem } from "@/services/inventoryService";
+import { ArrowUturnLeftIcon, BackwardIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 // app/about.tsx
@@ -35,9 +37,14 @@ const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
   const dates: Date[] = inventoryService.getDatesForItem( item );
 
   return (
-    <div className="p-8">
+    <>
+    <Link href="/inventory" className="btn btn-ghost px-8">
+      <ArrowUturnLeftIcon className="w-5 h-5" />
+      <span>Back</span>
+    </Link>
+    <div className="px-8">
       <h1 className="text-3xl font-bold text-primary">{item.name}</h1>
-      <p className="text-accent mt-4">{item.description}</p>
+      <p className="bg-base-100 mt-4">{item.description}</p>
       <div className="mt-4">
         <p>Duration: {item.durationDays} days</p>
         <p>Quantity: {item.quantity}</p>
@@ -48,7 +55,7 @@ const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
       <ul className="list-disc pl-6">
         {dates.map((date, index) => {
           const isPast = DateUtils.isPast( date );
-          const dateClass = isPast ? "text-error font-extrabold animate-bounce" : "text-accent";
+          const dateClass = isPast ? "text-error font-extrabold animate-bounce" : "bg-base-100";
 
           return (
             <li key={index} className={`text-lg ${dateClass}`}>
@@ -63,8 +70,8 @@ const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
         })}
       </ul>
     </div>
+    </>
   );
-
 };
 
 export default InventoryDetailPage;

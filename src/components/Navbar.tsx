@@ -75,9 +75,9 @@ const Navbar = () => {
                 </Link>
             </li>
             <li>
-            <Link href="/inventory" onClick={closeDrawer} className="btn btn-ghost">
-                <TableCellsIcon className="w-5 h-5" />
-                <span>Inventory</span>
+                <Link href="/inventory" onClick={closeDrawer} className="btn btn-ghost">
+                    <TableCellsIcon className="w-5 h-5" />
+                    <span>Inventory</span>
                 </Link>
             </li>
             </ul>
