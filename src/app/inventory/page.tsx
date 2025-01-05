@@ -2,6 +2,7 @@
 
 import AddInventoryItemModal from "@/components/modals/AddInventoryItemModal/AddInventoryItemModal";
 import { useApprovalModal } from "@/components/modals/ApproveModal/ApproveModalContext";
+import LogUseModal from "@/components/modals/LogItemUseModal/LogItemUseModal";
 import { DateUtils } from "@/components/utils/dateUtils";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import dbService from "@/services/dbService";
@@ -16,7 +17,8 @@ const InventoryPage = () => {
   const router = useRouter();
 
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [isLogUseModalOpen, setIsLogUseModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | undefined>();
   const { showApprovalModal: showModal } = useApprovalModal();
   
@@ -33,14 +35,21 @@ const InventoryPage = () => {
     // Handle adding a new item to the inventory
     const handleAddItem = (newItem: InventoryItem) => {
       console.log("Item added", newItem)
-      // setInventoryItems((prevItems) => [...prevItems, newItem]);
       loadItems();
     };
 
     // Handle updating existing item
     const handleUpdateItem = (updatedItem: InventoryItem) => {
       console.log("Item updated", updatedItem)
-      // setInventoryItems((prevItems) => [...prevItems, updatedItem]);
+      loadItems();
+    };
+
+    // Handle logging an item use
+    const handleLogItemUse = async (item: InventoryItem, date: Date) => {
+      console.log(`${item.name} used ${date}`);
+      item.lastUsed = date;
+      item.quantity -= 1;
+      await inventoryService.updateInventoryItem(item);
       loadItems();
     };
 
@@ -65,23 +74,33 @@ const InventoryPage = () => {
       });
     };
 
-  // Toggle the modal
-  const openModal = ( item?: InventoryItem | undefined ) => 
+  const openAddItemModal = ( item?: InventoryItem | undefined ) => 
     {
       setSelectedItem( item );
-      setIsModalOpen(true);
+      setIsAddItemModalOpen(true);
     }
-  const closeModal = () => 
+  const closeAddItemModal = () => 
     {
-      setIsModalOpen(false);
+      setIsAddItemModalOpen(false);
       setSelectedItem( undefined );
     }
+
+    const openLogUseModal = ( item?: InventoryItem | undefined ) => 
+      {
+        setSelectedItem( item );
+        setIsLogUseModalOpen(true);
+      }
+    const closeLogUseModal = () => 
+      {
+        setIsLogUseModalOpen(false);
+        setSelectedItem( undefined );
+      }
 
   return (
     <div className="grid items-center p-4 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="">
 
-      <button onClick={() => openModal()} className="btn btn-outline btn-primary">Add Item</button>
+      <button onClick={() => openAddItemModal()} className="btn btn-outline btn-primary">Add Item</button>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {inventoryItems.map((item) => (
@@ -126,7 +145,7 @@ const InventoryPage = () => {
 
               <span className="flex justify-start gap-2">
                 <button
-                    onClick={() => openModal(item)}
+                    onClick={() => openLogUseModal(item)}
                     className="btn btn-sm btn-outline btn-primary"
                   >
                     Log use
@@ -135,7 +154,7 @@ const InventoryPage = () => {
 
               <span className="flex justify-end gap-2">
                 <button
-                  onClick={() => openModal(item)}
+                  onClick={() => openAddItemModal(item)}
                   className="btn btn-sm btn-outline btn-secondary"
                 >
                   Edit
@@ -157,10 +176,17 @@ const InventoryPage = () => {
       {/* The modal component */}
       <AddInventoryItemModal
         selectedItem={selectedItem}
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isAddItemModalOpen}
+        onClose={closeAddItemModal}
         onAddItem={handleAddItem}
         onUpdateItem={handleUpdateItem}
+      />
+
+      <LogUseModal
+        isOpen={isLogUseModalOpen}
+        onClose={closeLogUseModal}
+        onSubmit={handleLogItemUse}
+        item={selectedItem}
       />
         
       </main>

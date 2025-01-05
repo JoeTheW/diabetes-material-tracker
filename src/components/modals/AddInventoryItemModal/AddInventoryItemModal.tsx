@@ -19,6 +19,8 @@ const AddInventoryItemModal: React.FC<AddItemModalProps> = ({ selectedItem, isOp
 
   useEffect(() => {
 
+    clear();
+
     if ( selectedItem)
     {
       setName(selectedItem.name);
