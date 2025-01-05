@@ -1,81 +1,79 @@
 'use client';
 
 import { DateUtils } from "@/components/utils/dateUtils";
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import dbService from "@/services/dbService";
 import inventoryService, { InventoryItem } from "@/services/inventoryService";
-import { ArrowUturnLeftIcon, BackwardIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useParams } from 'next/navigation'; // Import useParams from next/navigation
 
-// app/about.tsx
-const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
+// app/inventory/detail/[itemKey]/page.tsx
+const InventoryDetailPage = () => {
+  const { itemKey } = useParams(); // Get the itemKey from the route parameters
   const [item, setItem] = useState<InventoryItem | null>(null);
-  
+
   useEffect(() => {
+    if (itemKey) {
+      const fetchItem = async () => {
+        const fetchedItem = await inventoryService.getInventoryItem(itemKey as string);
+        setItem(fetchedItem || null);
+      };
 
-    const fetchItem = async () => {
-      const fetchedItem = await inventoryService.getInventoryItem(params.itemKey);
-      setItem(fetchedItem || null);
-    };
-
-    fetchItem();
-
-  }, [params.itemKey]);
+      fetchItem();
+    }
+  }, [itemKey]); // Effect depends on itemKey
 
   if (!item) {
     return (
+      <>
+        <Link href="/inventory" className="btn btn-ghost px-8">
+          <ArrowUturnLeftIcon className="w-5 h-5" />
+          <span>Back</span>
+        </Link>
+        <p className="px-8">Loading...</p>
+      </>
+    );
+  }
+
+  const dates: Date[] = inventoryService.getDatesForItem(item);
+
+  return (
     <>
       <Link href="/inventory" className="btn btn-ghost px-8">
         <ArrowUturnLeftIcon className="w-5 h-5" />
         <span>Back</span>
       </Link>
-      <p className="px-8">Loading...</p>
-    </> );
-  }
+      <div className="px-8">
+        <h1 className="text-3xl font-bold text-primary">{item.name}</h1>
+        <p className="bg-base-100 mt-4">{item.description}</p>
+        <div className="mt-4">
+          <p><small className="text-xs">Duration:</small> {item.durationDays} days</p>
+          <p><small className="text-xs">Quantity:</small> {item.quantity}</p>
+          <p><small className="text-xs">Last change:</small><br /> {DateUtils.simpleFormatDate(item.lastUsed)}</p>
+        </div>
 
-  const dates: Date[] = inventoryService.getDatesForItem( item );
+        <p className="mt-4 text-xl font-semibold mb-4">Usage dates</p>
+        <ul className="list-disc pl-6">
+          {dates.map((date, index) => {
+            const isPast = DateUtils.isPast(date);
+            const dateClass = isPast ? "text-error font-extrabold animate-bounce" : "bg-base-100";
 
-  return (
-    <>
-    <Link href="/inventory" className="btn btn-ghost px-8">
-      <ArrowUturnLeftIcon className="w-5 h-5" />
-      <span>Back</span>
-    </Link>
-    <div className="px-8">
-      <h1 className="text-3xl font-bold text-primary">{item.name}</h1>
-      <p className="bg-base-100 mt-4">{item.description}</p>
-      <div className="mt-4">
-        <p><small className="text-xs">Duration:</small> {item.durationDays} days</p>
-        <p><small className="text-xs">Quantity:</small> {item.quantity}</p>
-        <p><small className="text-xs">Last change:</small><br></br> {DateUtils.simpleFormatDate(item.lastUsed)}</p>
+            return (
+              <li key={index} className={`text-lg ${dateClass}`}>
+                {DateUtils.simpleFormatDate(date)}
+                {!isPast && index === 0 && (
+                  <p className="text-xs">{DateUtils.formatTimeDifference(date)} from now</p>
+                )}
+                {isPast && (
+                  <p className="ml-2 text-sm text-error italic">(Past due!)</p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
-
-      <p className="mt-4 text-xl font-semibold mb-4">Usage dates</p>
-      <ul className="list-disc pl-6">
-        {dates.map((date, index) => {
-          const isPast = DateUtils.isPast( date );
-          const dateClass = isPast ? "text-error font-extrabold animate-bounce" : "bg-base-100";
-
-          return (
-            <li key={index} className={`text-lg ${dateClass}`}>
-              {DateUtils.simpleFormatDate(date)}
-              {!isPast && index == 0 && ( 
-                <p className="text-xs">{DateUtils.formatTimeDifference( date )} from now</p>
-              )}
-              {isPast && (
-                <p className="ml-2 text-sm text-error italic">
-                  (Past due!)
-                </p>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
     </>
   );
 };
 
 export default InventoryDetailPage;
-
