@@ -38,7 +38,7 @@ class InventoryService {
         const dates: Date[] = [];
         const startDate:Date = item.lastUsed ?? new Date();
         //for the quantity available, create an array of dates starting on item.lastUsed, with a duration of item.durationDays
-        for (let i = 0; i < item.quantity; i++) {
+        for (let i = 1; i < item.quantity; i++) {
             dates.push(new Date(startDate.getTime() + i * item.durationDays * 24 * 60 * 60 * 1000));
         }
 

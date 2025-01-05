@@ -46,9 +46,9 @@ const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
       <h1 className="text-3xl font-bold text-primary">{item.name}</h1>
       <p className="bg-base-100 mt-4">{item.description}</p>
       <div className="mt-4">
-        <p>Duration: {item.durationDays} days</p>
-        <p>Quantity: {item.quantity}</p>
-        <p>Last Used: {item.lastUsed.toLocaleDateString()}</p>
+        <p><small className="text-xs">Duration:</small> {item.durationDays} days</p>
+        <p><small className="text-xs">Quantity:</small> {item.quantity}</p>
+        <p><small className="text-xs">Last change:</small><br></br> {DateUtils.simpleFormatDate(item.lastUsed)}</p>
       </div>
 
       <p className="mt-4 text-xl font-semibold mb-4">Usage dates</p>
@@ -60,6 +60,9 @@ const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
           return (
             <li key={index} className={`text-lg ${dateClass}`}>
               {DateUtils.simpleFormatDate(date)}
+              {!isPast && index == 0 && ( 
+                <p className="text-xs">{DateUtils.formatTimeDifference( date )} from now</p>
+              )}
               {isPast && (
                 <p className="ml-2 text-sm text-error italic">
                   (Past due!)
