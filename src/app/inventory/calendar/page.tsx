@@ -20,6 +20,12 @@ const CalendarPage = () => {
       const inventoryItems: InventoryItem[] = await inventoryService.getInventoryItems();
       const calendarItems: CalendarItem[] = inventoryItems.map((item, index, array) => {
         const dates = inventoryService.getDatesForItem(item);
+
+        //add last used date to the start of the array
+        if (item.lastUsed) {
+          dates.unshift(item.lastUsed);
+        }
+        
         const color = generateDistinctColor(index, array.length); // Use our distinct color function
         return { name: item.name, color, dates };
       });

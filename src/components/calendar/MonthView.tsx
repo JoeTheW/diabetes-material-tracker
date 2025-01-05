@@ -18,7 +18,7 @@ const MonthView = ({
   onMonthChange: (newMonth: Date) => void;
 }) => {
   const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>(
-    items.reduce((acc, item) => ({ ...acc, [item.name]: true }), {})
+    items.reduce((acc, item) => ({ ...acc, [item.name]: false }), {}) // Ensure each item is initially visible
   );
 
   const start = startOfMonth(currentMonth);
@@ -37,17 +37,13 @@ const MonthView = ({
     onMonthChange(nextMonth);
   };
 
-  if (!items || items.length <= 0)
-    {
-      return (
-        <p className="p-8">Loading...</p>
-      )
-    }
+  if (!items || items.length <= 0) {
+    return <p className="p-8">Loading...</p>;
+  }
 
   const toggleItemVisibility = (itemName: string) => {
     setVisibleItems((prev) => ({ ...prev, [itemName]: !prev[itemName] }));
   };
-
 
   return (
     <div className={styles["month-view"]}>
@@ -81,13 +77,20 @@ const MonthView = ({
               <div key={index} className={styles["day"]}>
                 <span>{format(day, "d")}</span>
                 <div className={styles["dots"]}>
-                  {dots.map((color, idx) => (
-                    <div
-                      key={idx}
-                      className={styles["dot"]}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
+                  {dots.map((color, idx) => {
+                    // Find the last dot by checking if this dot corresponds to the latest date for this item
+                    const item = items.find((i) => i.color === color);
+                    const lastDate = item?.dates[item.dates.length - 1];
+                    const isLastDot = isSameDay(lastDate!, day);
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`${styles["dot"]} ${isLastDot ? "animate-pulse ring-4 ring-offset-2" : ""}`}
+                        style={{ backgroundColor: color }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -103,7 +106,7 @@ const MonthView = ({
               <input
                 type="checkbox"
                 className="checkbox"
-                checked={visibleItems[item.name]}
+                checked={visibleItems[item.name] ?? false} // Set default to true if undefined
                 onChange={() => toggleItemVisibility(item.name)}
               />
               <div
