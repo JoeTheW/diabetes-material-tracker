@@ -1,6 +1,6 @@
 'use client';
 
-import { Bars3Icon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, CalendarDaysIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 import { useState } from 'react';
@@ -25,6 +25,8 @@ const Navbar = () => {
         return 'About Us';
       case '/inventory/detail':
         return 'Details';
+      case '/inventory/calendar':
+        return 'Calendar';
       default:
         return pathname.split('/').pop() || 'Unknown page';
     }
@@ -78,6 +80,12 @@ const Navbar = () => {
                 <Link href="/inventory" onClick={closeDrawer} className="btn btn-ghost">
                     <TableCellsIcon className="w-5 h-5" />
                     <span>Inventory</span>
+                </Link>
+            </li>
+            <li>
+                <Link href="/inventory/calendar" onClick={closeDrawer} className="btn btn-ghost">
+                    <CalendarDaysIcon className="w-5 h-5" />
+                    <span>Calendar</span>
                 </Link>
             </li>
             </ul>
