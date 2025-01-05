@@ -10,28 +10,28 @@ import { useEffect, useState } from "react";
 
 // app/about.tsx
 const InventoryDetailPage = ({ params }: { params: { itemKey: string } }) => {
-  const [ itemKey, setItemKey ] = useState("");
   const [item, setItem] = useState<InventoryItem | null>(null);
   
   useEffect(() => {
 
-    const getItemKey = async () => {
-      const paramItemKey = await params.itemKey;
-      setItemKey(paramItemKey);
-
-      fetchItem();
-    };
-    getItemKey();
-
     const fetchItem = async () => {
-      const fetchedItem = await inventoryService.getInventoryItem( itemKey );
+      const fetchedItem = await inventoryService.getInventoryItem(params.itemKey);
       setItem(fetchedItem || null);
     };
 
-  }, [itemKey]);
+    fetchItem();
+
+  }, [params.itemKey]);
 
   if (!item) {
-    return <p>Loading...</p>;
+    return (
+    <>
+      <Link href="/inventory" className="btn btn-ghost px-8">
+        <ArrowUturnLeftIcon className="w-5 h-5" />
+        <span>Back</span>
+      </Link>
+      <p className="px-8">Loading...</p>
+    </> );
   }
 
   const dates: Date[] = inventoryService.getDatesForItem( item );

@@ -1,9 +1,9 @@
-import { openDB } from 'idb';
+import { IDBPDatabase, openDB } from 'idb';
 import { InventoryItem } from './inventoryService';
 
 class DBService {
   private dbName: string = 'diabetesMaterialDB';
-  private db: any;
+  private db?: IDBPDatabase<unknown>;
 
   // Constructor is private to prevent multiple instances
   private constructor() {
@@ -40,6 +40,7 @@ class DBService {
 
   // Get all items from the inventory
   public async getAllItems( storeName: string ): Promise<InventoryItem[]> {
+    if ( !this.db ) { throw new Error("Database is not initialized."); }
     return await this.db.getAll(storeName);
   }
 
@@ -79,11 +80,13 @@ class DBService {
 
   // Get a single item by its name
   public async getItemByKey(storeName: string, name: string): Promise<InventoryItem | undefined> {
+    if ( !this.db ) { throw new Error("Database is not initialized."); }
     return await this.db.get(storeName, name);
   }
 
   // Delete an item by its name
   public async deleteItem(storeName: string, name: string): Promise<void> {
+    if ( !this.db ) { throw new Error("Database is not initialized."); }
     await this.db.delete(storeName, name);
   }
 }
