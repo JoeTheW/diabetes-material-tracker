@@ -1,10 +1,12 @@
 'use client';
 
 import AddInventoryItemModal from "@/components/modals/AddInventoryItemModal/AddInventoryItemModal";
+import { useApprovalModal } from "@/components/modals/ApproveModal/ApproveModalContext";
 import { DateUtils } from "@/components/utils/dateUtils";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import dbService from "@/services/dbService";
 import inventoryService, { InventoryItem } from "@/services/inventoryService";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,6 +18,7 @@ const InventoryPage = () => {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | undefined>();
+  const { showApprovalModal: showModal } = useApprovalModal();
   
   useEffect(() => {
     loadItems();
@@ -46,6 +49,22 @@ const InventoryPage = () => {
       router.push(`/inventory/detail/${item.name}`);
     };
 
+    const handleDeleteItem = (item: InventoryItem) => {
+      console.log('Delete item:', item);
+
+      showModal({
+        title: `Delete ${item.name}`,
+        message: `Are you sure you want to delete the item <b>'${item.name}'</b>? <br> This action cannot be undone.`,
+        cancelText: 'No',
+        approveText: 'Yes',
+        onCancel: () => console.log('Action cancelled'),
+        onApprove: async () => { 
+          await inventoryService.deleteInventoryItem( item ); 
+          loadItems(); 
+        },
+      });
+    };
+
   // Toggle the modal
   const openModal = ( item?: InventoryItem | undefined ) => 
     {
@@ -62,13 +81,20 @@ const InventoryPage = () => {
     <div className="grid items-center p-4 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="">
 
-      <button onClick={() => openModal()} className="btn btn-primary">Add Item</button>
+      <button onClick={() => openModal()} className="btn btn-outline btn-primary">Add Item</button>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {inventoryItems.map((item) => (
         <div key={item.name} className="card bg-base-100 shadow-sm border border-base-300 p-4">
           <div className="card-body p-1">
-            <h3 className="card-title text-lg font-semibold text-primary">{item.name}</h3>
+            <span className="flex justify-between">
+              <h3 className="card-title text-lg font-semibold text-primary">{item.name}</h3>
+              <button
+                  onClick={() => handleDeleteItem(item)}
+                  className="btn btn-sm btn-outline btn-circle btn-error"
+                ><TrashIcon className="w-5 h-5" />
+              </button>
+            </span>
             <p className="text-sm bg-base-100">{item.description}</p>
             
             <div className="mt-2 flex justify-between text-sm bg-base-100">
@@ -95,21 +121,33 @@ const InventoryPage = () => {
               <small>({ DateUtils.simpleFormatDate( inventoryService.getFinalValidDateForItem(item) )})</small>
             </p>
 
-            <div className="card-actions justify-end mt-4">
 
-              <button
-                onClick={() => openModal(item)}
-                className="btn btn-sm btn-secondary"
-              >
-                Edit
-              </button>
+            <div className="card-actions justify-between mt-2">
 
-              <button
-                onClick={() => handleViewDetails(item)}
-                className="btn btn-sm btn-primary"
-              >
-                View Details
-              </button>
+              <span className="flex justify-start gap-2">
+                <button
+                    onClick={() => openModal(item)}
+                    className="btn btn-sm btn-outline btn-primary"
+                  >
+                    Log use
+                </button>
+              </span>
+
+              <span className="flex justify-end gap-2">
+                <button
+                  onClick={() => openModal(item)}
+                  className="btn btn-sm btn-outline btn-secondary"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleViewDetails(item)}
+                  className="btn btn-sm btn-outline btn-primary"
+                >
+                  View Details
+                </button>
+              </span>
             </div>
           </div>
         </div>

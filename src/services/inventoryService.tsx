@@ -34,6 +34,10 @@ class InventoryService {
         return dbService.updateItem( 'inventory', item);
     }
 
+    deleteInventoryItem( item: InventoryItem ): Promise<void> {
+        return dbService.deleteItem( 'inventory', item.name);
+    }
+
     getInventoryItem( key: string ): Promise<InventoryItem | undefined> {
         return dbService.getItemByKey( 'inventory', key);
     }

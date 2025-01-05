@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { ApproveModalProvider } from "@/components/modals/ApproveModal/ApproveModalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ApproveModalProvider>
         <div className="mx-auto max-w-5xl text-2xl mb-10">
           <header className="mb-2">
             <Navbar />
@@ -35,6 +37,7 @@ export default function RootLayout({
             {children}
           </main>
         </div>
+        </ApproveModalProvider>
       </body>
     </html>
   );
