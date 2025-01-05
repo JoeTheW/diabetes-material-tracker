@@ -1,3 +1,4 @@
+// app/inventory/detail/page.tsx
 'use client';
 
 import { DateUtils } from "@/components/utils/dateUtils";
@@ -5,23 +6,25 @@ import inventoryService, { InventoryItem } from "@/services/inventoryService";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useParams } from 'next/navigation'; // Import useParams from next/navigation
 
-// app/inventory/detail/[itemKey]/page.tsx
 const InventoryDetailPage = () => {
-  const { itemKey } = useParams(); // Get the itemKey from the route parameters
+  
   const [item, setItem] = useState<InventoryItem | null>(null);
 
   useEffect(() => {
+    const { search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    const itemKey = urlParams.get("itemKey"); // Get the itemKey from URL params
+
     if (itemKey) {
       const fetchItem = async () => {
-        const fetchedItem = await inventoryService.getInventoryItem(itemKey as string);
+        const fetchedItem = await inventoryService.getInventoryItem(itemKey);
         setItem(fetchedItem || null);
       };
 
       fetchItem();
     }
-  }, [itemKey]); // Effect depends on itemKey
+  }, []); // Refetch if itemKey changes
 
   if (!item) {
     return (

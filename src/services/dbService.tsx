@@ -2,6 +2,7 @@ import { IDBPDatabase, openDB } from 'idb';
 import { InventoryItem } from './inventoryService';
 
 class DBService {
+
   private dbName: string = 'diabetesMaterialDB';
   private db?: IDBPDatabase<unknown>;
 
@@ -42,6 +43,12 @@ class DBService {
   public async getAllItems( storeName: string ): Promise<InventoryItem[]> {
     if ( !this.db ) { throw new Error("Database is not initialized."); }
     return await this.db.getAll(storeName);
+  }
+
+  public async getAllKeys( storeName: string ): Promise<IDBValidKey[]> {
+    if ( !this.db ) { throw new Error("Database is not initialized."); }
+    
+    return await this.db.getAllKeys(storeName);
   }
 
  // Add item if it doesn't already exist

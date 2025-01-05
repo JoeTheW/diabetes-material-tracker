@@ -13,17 +13,13 @@ export interface InventoryItem {
 class InventoryService {
     getInventoryItems(): Promise<InventoryItem[]> {
         return dbService.getAllItems('inventory');
+    }
 
+    async getInventoryItemKeys(): Promise<string[]> {
+        const keys = dbService.getAllKeys('inventory');
+        const keyStrings: string[] = (await keys).map((key) => key.toString());
 
-        // return [
-        //     {
-        //       name: "Sensor",
-        //       description: "Sensor for diabetes",
-        //       durationDays: 4,
-        //       quantity: 6,
-        //       lastUsed: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        //     },
-        // ]
+        return keyStrings;
     }
 
     storeInventoryItem( item: InventoryItem ): Promise<void> {

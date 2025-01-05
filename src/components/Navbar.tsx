@@ -23,8 +23,8 @@ const Navbar = () => {
         return 'Inventory';
       case '/about':
         return 'About Us';
-      case '/contact':
-        return 'Contact';
+      case '/inventory/detail':
+        return 'Details';
       default:
         return pathname.split('/').pop() || 'Unknown page';
     }

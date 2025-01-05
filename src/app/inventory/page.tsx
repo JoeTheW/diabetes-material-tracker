@@ -55,7 +55,7 @@ const InventoryPage = () => {
 
     const handleViewDetails = (item: InventoryItem) => {
       console.log('View details for:', item);
-      router.push(`/inventory/detail/${item.name}`);
+      router.push(`/inventory/detail?itemKey=${item.name}`);
     };
 
     const handleDeleteItem = (item: InventoryItem) => {

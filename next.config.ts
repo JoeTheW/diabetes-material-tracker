@@ -4,6 +4,7 @@ const isProd = process.env.NODE_ENV === "production";
 const repoName = "diabetes-material-tracker-page"; // Your GitHub repo name
 
 const nextConfig: NextConfig = {
+  output: 'export',
   assetPrefix: isProd ? `/${repoName}/` : "",
   basePath: isProd ? `/${repoName}` : "",
   images: {
