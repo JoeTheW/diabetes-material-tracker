@@ -15,6 +15,7 @@ const InventoryPage = () => {
 
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | undefined>();
   
   useEffect(() => {
     loadItems();
@@ -29,8 +30,15 @@ const InventoryPage = () => {
     // Handle adding a new item to the inventory
     const handleAddItem = (newItem: InventoryItem) => {
       console.log("Item added", newItem)
-      setInventoryItems((prevItems) => [...prevItems, newItem]);
-      // loadItems();
+      // setInventoryItems((prevItems) => [...prevItems, newItem]);
+      loadItems();
+    };
+
+    // Handle updating existing item
+    const handleUpdateItem = (updatedItem: InventoryItem) => {
+      console.log("Item updated", updatedItem)
+      // setInventoryItems((prevItems) => [...prevItems, updatedItem]);
+      loadItems();
     };
 
     const handleViewDetails = (item: InventoryItem) => {
@@ -39,14 +47,22 @@ const InventoryPage = () => {
     };
 
   // Toggle the modal
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = ( item?: InventoryItem | undefined ) => 
+    {
+      setSelectedItem( item );
+      setIsModalOpen(true);
+    }
+  const closeModal = () => 
+    {
+      setIsModalOpen(false);
+      setSelectedItem( undefined );
+    }
 
   return (
     <div className="grid items-center p-4 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="">
 
-      <button onClick={openModal} className="btn btn-primary">Add Item</button>
+      <button onClick={() => openModal()} className="btn btn-primary">Add Item</button>
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {inventoryItems.map((item) => (
@@ -80,6 +96,14 @@ const InventoryPage = () => {
             </p>
 
             <div className="card-actions justify-end mt-4">
+
+              <button
+                onClick={() => openModal(item)}
+                className="btn btn-sm btn-secondary"
+              >
+                Edit
+              </button>
+
               <button
                 onClick={() => handleViewDetails(item)}
                 className="btn btn-sm btn-primary"
@@ -94,9 +118,11 @@ const InventoryPage = () => {
 
       {/* The modal component */}
       <AddInventoryItemModal
+        selectedItem={selectedItem}
         isOpen={isModalOpen}
         onClose={closeModal}
         onAddItem={handleAddItem}
+        onUpdateItem={handleUpdateItem}
       />
         
       </main>

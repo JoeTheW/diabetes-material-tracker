@@ -60,6 +60,23 @@ class DBService {
   await this.db.put(storeName, item);
 }
 
+ // Update item
+ public async updateItem(storeName: string, item: InventoryItem): Promise<void> {
+  if (!this.db) {
+    throw new Error("Database is not initialized.");
+  }
+
+  // Check if the item already exists based on its name
+  const existingItem = await this.db.get(storeName, item.name);
+
+  if (!existingItem) {
+    throw new Error("Item doesn't exist in the database");
+  }
+
+  // If the item does exist, update it
+  await this.db.put(storeName, item);
+}
+
   // Get a single item by its name
   public async getItemByKey(storeName: string, name: string): Promise<InventoryItem | undefined> {
     return await this.db.get(storeName, name);
