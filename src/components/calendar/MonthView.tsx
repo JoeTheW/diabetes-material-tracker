@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from "date-fns";
 import styles from "./MonthView.module.css";
+import Link from "next/link";
+import { ArrowRightIcon, TableCellsIcon } from "@heroicons/react/24/solid";
 
 interface Item {
   name: string;
@@ -38,7 +40,22 @@ const MonthView = ({
   };
 
   if (!items || items.length <= 0) {
-    return <p className="p-8">Loading...</p>;
+    return (
+      <div className="p-8">
+      <p>No items to track</p>
+      <p>
+        Add items via the inventory page.
+      </p>
+
+      <Link href="/inventory" className="btn btn-primary btn-outline font-bold mt-4">
+          <TableCellsIcon className="w-5 h-5" />
+          <span>Inventory</span>
+          <ArrowRightIcon className="w-5 h-5" />
+      </Link>
+      
+    
+    </div>
+    );
   }
 
   const toggleItemVisibility = (itemName: string) => {

@@ -13,6 +13,7 @@ interface CalendarItem {
 const CalendarPage = () => {
   const [items, setItems] = useState<CalendarItem[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [ready, setReady] = useState(false);
 
   // Fetch inventory items and transform them into calendar items
   useEffect(() => {
@@ -30,6 +31,7 @@ const CalendarPage = () => {
         return { name: item.name, color, dates };
       });
       setItems(calendarItems);
+      setReady( true );
     };
 
     fetchInventoryItems();
@@ -38,6 +40,15 @@ const CalendarPage = () => {
   const handleMonthChange = (newMonth: Date) => {
     setCurrentMonth(newMonth);
   };
+
+  if ( !ready )
+  {
+    return(
+      <div className="p-8">
+      <p className="animate-bounce">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">
