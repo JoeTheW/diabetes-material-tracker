@@ -97,7 +97,7 @@ const InventoryPage = () => {
       }
 
   return (
-    <div className="grid items-center p-4 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid items-center p-4 gap-16 font-[family-name:var(--font-geist-sans)]">
       <main className="">
 
       <button onClick={() => openAddItemModal()} className="btn btn-outline btn-primary">Add Item</button>

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Diabetes material tracker",
+  title: "Supply Tracker",
 };
 
 export default function RootLayout({

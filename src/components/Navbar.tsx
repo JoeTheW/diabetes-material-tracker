@@ -1,6 +1,6 @@
 'use client';
 
-import { Bars3Icon, CalendarDaysIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, CalendarDaysIcon, ChatBubbleLeftRightIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 import { useState } from 'react';
@@ -16,6 +16,7 @@ const Navbar = () => {
   const closeDrawer = () => setDrawerOpen(false);
 
   const getPageName = (pathname: string): string => {
+
     switch (pathname) {
       case '/':
         return 'Home';
@@ -48,11 +49,17 @@ const Navbar = () => {
         {/* Basic Navbar */}
         <div className="flex justify-between pt-5 items-center px-4">
           {/* Basic controls (like theme toggle) */}
-          <div className="flex justify-between items-center gap-5">
+          <div className="flex justify-between items-center gap-2">
           
             <label htmlFor="drawer-toggle" className="btn btn-ghost">
             <Bars3Icon className="w-10 h-10" />
             </label>
+
+            { currentPage != 'Home' && (
+            <Link href="/" className="px-0 btn btn-ghost">
+              <HomeIcon className="w-5 h-5" />
+            </Link>
+            )}
 
             <p className="font-semibold">{currentPage}</p>
           </div>
@@ -86,6 +93,13 @@ const Navbar = () => {
                 <Link href="/inventory/calendar" onClick={closeDrawer} className="btn btn-ghost">
                     <CalendarDaysIcon className="w-5 h-5" />
                     <span>Calendar</span>
+                </Link>
+            </li>
+            <div className="divider divider-start"><span className="text-sm">Other</span></div>
+            <li>
+                <Link href="https://forms.gle/6RrrmDj3EZrbfCbWA" target="_blank" className="btn btn-ghost text-primary">
+                    <ChatBubbleLeftRightIcon className="w-5 h-5" />
+                    <span>Have Feedback?</span>
                 </Link>
             </li>
             </ul>
