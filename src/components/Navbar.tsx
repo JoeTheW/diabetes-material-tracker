@@ -56,7 +56,7 @@ const Navbar = () => {
             </label>
 
             { currentPage != 'Home' && (
-            <Link href="/" className="px-0 btn btn-ghost">
+            <Link href="/home" className="px-0 btn btn-ghost">
               <HomeIcon className="w-5 h-5" />
             </Link>
             )}
@@ -78,7 +78,7 @@ const Navbar = () => {
 
             <div className="divider divider-start"><span className="text-sm">Navigation</span></div>
             <li>
-                <Link href="/" onClick={closeDrawer} className="btn btn-ghost">
+                <Link href="/home" onClick={closeDrawer} className="btn btn-ghost">
                 <HomeIcon className="w-5 h-5" />
                 <span>Home</span>
                 </Link>

@@ -10,7 +10,16 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for GitHub Pages
   },
-  /* Add other custom config options here */
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/home',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
