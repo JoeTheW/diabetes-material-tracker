@@ -1,6 +1,6 @@
 'use client';
 
-import { Bars3Icon, CalendarDaysIcon, ChatBubbleLeftRightIcon, HeartIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import { ArrowTopRightOnSquareIcon, Bars3Icon, CalendarDaysIcon, ChatBubbleLeftRightIcon, HeartIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 import { useState } from 'react';
@@ -110,12 +110,14 @@ const Navbar = () => {
                 <Link href="https://forms.gle/6RrrmDj3EZrbfCbWA" target="_blank" className="btn btn-ghost text-primary">
                     <ChatBubbleLeftRightIcon className="w-5 h-5" />
                     <span>Have Feedback?</span>
+                    <ArrowTopRightOnSquareIcon className="w-5 h-5" />
                 </Link>
             </li>
             <li>
                 <Link href="https://buymeacoffee.com/jwiltshire" target="_blank" onClick={handleSupportClick} className="btn btn-ghost text-primary">
                     <HeartIcon className="w-5 h-5" />
                     <span>Appreciate My Work?</span>
+                    <ArrowTopRightOnSquareIcon className="w-5 h-5" />
                 </Link>
             </li>
             </ul>
