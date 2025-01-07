@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
-const repoName = "diabetes-material-tracker"; // Your GitHub repo name
+const repoName = "supply-tracker"; // Your GitHub repo name
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -9,16 +9,6 @@ const nextConfig: NextConfig = {
   basePath: isProd ? `/${repoName}` : "",
   images: {
     unoptimized: true, // Required for GitHub Pages
-  },
-
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/home',
-        permanent: true,
-      },
-    ];
   },
 };
 
