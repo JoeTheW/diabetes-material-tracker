@@ -5,7 +5,7 @@ import DOMPurify from 'dompurify';
 type ModalOptions = {
   title?: string;
   message?: string;
-  cancelText?: string;
+  cancelText?: string | null;
   approveText?: string;
   onApprove?: () => void;
   onCancel?: () => void;
@@ -38,6 +38,7 @@ export const ApproveModalProvider: React.FC<{ children: ReactNode }> = ({ childr
               ></div>
             )}
             <div className="modal-action">
+              { modalOptions.cancelText && ( 
               <button
                 className="btn btn-outline"
                 onClick={() => {
@@ -45,8 +46,9 @@ export const ApproveModalProvider: React.FC<{ children: ReactNode }> = ({ childr
                   hideModal();
                 }}
               >
-                {modalOptions.cancelText || 'Cancel'}
+              {modalOptions.cancelText || 'Cancel'}
               </button>
+              )}
               <button
                 className="btn btn-primary"
                 onClick={() => {

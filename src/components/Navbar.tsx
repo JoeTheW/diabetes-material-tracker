@@ -1,19 +1,29 @@
 'use client';
 
-import { Bars3Icon, CalendarDaysIcon, ChatBubbleLeftRightIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, CalendarDaysIcon, ChatBubbleLeftRightIcon, HeartIcon, HomeIcon, TableCellsIcon } from "@heroicons/react/24/solid";
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 import { useState } from 'react';
 import { usePathname } from "next/navigation";
+import { useApprovalModal } from "./modals/ApproveModal/ApproveModalContext";
 
 const Navbar = () => {
     const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
-  // Function to close the drawer when a link is clicked
   const closeDrawer = () => setDrawerOpen(false);
+  
+  const { showApprovalModal: showModal } = useApprovalModal();
+
+  const handleSupportClick = () => {
+    showModal({
+      title: `Thank you!`,
+      message: `Thank you for supporting my work ❤️`,
+      cancelText: null,
+      approveText: '😊',
+      onCancel: () => console.log('Action cancelled'),
+    });
+  };
 
   const getPageName = (pathname: string): string => {
 
@@ -100,6 +110,12 @@ const Navbar = () => {
                 <Link href="https://forms.gle/6RrrmDj3EZrbfCbWA" target="_blank" className="btn btn-ghost text-primary">
                     <ChatBubbleLeftRightIcon className="w-5 h-5" />
                     <span>Have Feedback?</span>
+                </Link>
+            </li>
+            <li>
+                <Link href="https://buymeacoffee.com/jwiltshire" target="_blank" onClick={handleSupportClick} className="btn btn-ghost text-primary">
+                    <HeartIcon className="w-5 h-5" />
+                    <span>Appreciate My Work?</span>
                 </Link>
             </li>
             </ul>
