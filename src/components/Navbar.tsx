@@ -29,6 +29,7 @@ const Navbar = () => {
 
     switch (pathname) {
       case '/':
+      case '/home':
         return 'Home';
       case '/inventory':
         return 'Inventory';
